@@ -3,7 +3,7 @@ workflow facets_workflow {
 }
 
 task FACETS {
-	String pair_id
+	String pair_name
 	File tumor_bam
 	File tumor_bam_index
 	File normal_bam
@@ -30,12 +30,12 @@ task FACETS {
 		cd /usr/gitc
 
 		# Samtools mpileup wrapper
-		perl /usr/gitc/scripts_snp_pileup/snp-pileup.pl ${normal_bam} ${tumor_bam} ${pair_id}
+		perl /usr/gitc/scripts_snp_pileup/snp-pileup.pl ${normal_bam} ${tumor_bam} ${pair_name}
 
         echo "Finished pileup, launching FACETS"
 
 		# mv for R script
-		mv /usr/gitc/${pair_id} /usr/gitc/pileup/${pair_id}
+		mv /usr/gitc/${pair_name} /usr/gitc/pileup/${pair_name}
 
 		# Gotta add a little vanilla
 		Rscript --vanilla /usr/gitc/facets.R ${niter}
@@ -45,7 +45,7 @@ task FACETS {
 		# move to home directory for output
 		mv /usr/gitc/pileup/Facets_output.txt $home_dir/Facets_output.txt
 		mv /usr/gitc/pileup/Facets_iterations.txt $home_dir/Facets_iterations.txt
-		mv /usr/gitc/pileup/${pair_id} $home_dir/${pair_id}_pileup.txt
+		mv /usr/gitc/pileup/${pair_name} $home_dir/${pair_name}_pileup.txt
 		mv /usr/gitc/pileup/genome_segments.pdf $home_dir/genome_segments.pdf
 		mv /usr/gitc/pileup/diagnostic_plot.pdf $home_dir/diagnostic_plot.pdf
 		mv /usr/gitc/pileup/fit_cncf.txt $home_dir/fit_cncf.txt
@@ -59,7 +59,7 @@ task FACETS {
 	output {
 		File facetsOutput = "Facets_output.txt"
 		File facetsIterations = "Facets_iterations.txt"
-		File pileup = "${pair_id}_pileup.txt"
+		File pileup = "${pair_name}_pileup.txt"
 		File genomeSegmentsPdf = "genome_segments.pdf"
 		File diagnosticPlotPdf = "diagnostic_plot.pdf"
 		File fitCncfTable = "fit_cncf.txt"
