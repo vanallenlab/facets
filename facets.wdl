@@ -52,8 +52,10 @@ task FACETS {
 
         cd $home_dir
 
-        sed -n '2p' $home_dir/Facets_output.txt | awk '{print $3}' > purity.txt
-        sed -n '2p' $home_dir/Facets_output.txt | awk '{print $4}' > ploidy.txt
+        purity=$(sed -n '2p' $home_dir/Facets_output.txt | awk '{print $3}')
+        ploidy=$(sed -n '2p' $home_dir/Facets_output.txt | awk '{print $4}')
+
+        if [ $ploidy != 'NA' ]; then ploidy=$(printf "%.3f\n" "$ploidy") ; fi
     >>>
 
     output {
