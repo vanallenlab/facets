@@ -43,28 +43,31 @@ task FACETS {
         cd /usr/gitc/pileup
 
         # move to home directory for output
-        mv /usr/gitc/pileup/Facets_output.txt $home_dir/Facets_output.txt
-        mv /usr/gitc/pileup/Facets_iterations.txt $home_dir/Facets_iterations.txt
+        mv /usr/gitc/pileup/Facets_output.txt $home_dir/${pair_name}_Facets_output.txt
+        mv /usr/gitc/pileup/Facets_iterations.txt $home_dir/${pair_name}_Facets_iterations.txt
         mv /usr/gitc/pileup/${pair_name} $home_dir/${pair_name}_pileup.txt
-        mv /usr/gitc/pileup/genome_segments.pdf $home_dir/genome_segments.pdf
-        mv /usr/gitc/pileup/diagnostic_plot.pdf $home_dir/diagnostic_plot.pdf
-        mv /usr/gitc/pileup/fit_cncf.txt $home_dir/fit_cncf.txt
+        mv /usr/gitc/pileup/genome_segments.pdf $home_dir/${pair_name}_genome_segments.pdf
+        mv /usr/gitc/pileup/diagnostic_plot.pdf $home_dir/${pair_name}_diagnostic_plot.pdf
+        mv /usr/gitc/pileup/fit_cncf.txt $home_dir/${pair_name}_fit_cncf.txt
 
         cd $home_dir
 
-        purity=$(sed -n '2p' $home_dir/Facets_output.txt | awk '{print $3}')
-        ploidy=$(sed -n '2p' $home_dir/Facets_output.txt | awk '{print $4}')
+        purity=$(sed -n '2p' $home_dir/${pair_name}_Facets_output.txt | awk '{print $3}')
+        ploidy=$(sed -n '2p' $home_dir/${pair_name}_Facets_output.txt | awk '{print $4}')
 
         if [ $ploidy != 'NA' ]; then ploidy=$(printf "%.3f\n" "$ploidy") ; fi
+
+        echo $purity > purity.txt
+        echo $ploidy > ploidy.txt
     >>>
 
     output {
-        File facetsOutput = "Facets_output.txt"
-        File facetsIterations = "Facets_iterations.txt"
+        File facetsOutput = "${pair_name}_Facets_output.txt"
+        File facetsIterations = "${pair_name}_Facets_iterations.txt"
         File pileup = "${pair_name}_pileup.txt"
-        File genomeSegmentsPdf = "genome_segments.pdf"
-        File diagnosticPlotPdf = "diagnostic_plot.pdf"
-        File fitCncfTable = "fit_cncf.txt"
+        File genomeSegmentsPdf = "${pair_name}_genome_segments.pdf"
+        File diagnosticPlotPdf = "${pair_name}_diagnostic_plot.pdf"
+        File fitCncfTable = "${pair_name}_fit_cncf.txt"
         String purity = read_string("purity.txt")
         String ploidy = read_string("ploidy.txt")
     }
