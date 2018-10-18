@@ -111,8 +111,8 @@ task FACETS {
         File diagnostics_plot = "${pair_name}.diagnostic_plot.pdf"
         File cncf = "${pair_name}.facets_cncf.txt"
         File summary = "${pair_name}.facets_output.txt"
-        File flags = "{pair_name}.facets_flags.txt"
-        File emflags = "{pair_name}.facets_emflags.txt"
+        File flags = "${pair_name}.facets_flags.txt"
+        File emflags = "${pair_name}.facets_emflags.txt"
         String purity = read_string("purity.txt")
         String ploidy = read_string("ploidy.txt")
         String log_likelihood = read_string("log_likelihood.txt")
