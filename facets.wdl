@@ -34,6 +34,11 @@ workflow facets_workflow {
             cval=cval
     }
 
+    call InferWGD {
+        input:
+            cncf=FACETS.cncf
+    }
+
     output {
         File facets_pileup = Pileup.pileup
         File facets_genome_segments = FACETS.genome_segments
@@ -46,6 +51,8 @@ workflow facets_workflow {
         String facets_ploidy = FACETS.ploidy
         String facets_log_likelihood = FACETS.log_likelihood
         String facets_dip_log_r = FACETS.dip_log_r
+        String facets_fraction_mcn_ge2 = InferWGD.fraction_mcn_ge2
+        String facets_wgd_bool = InferWGD.wgd_bool
     }
 }
 
@@ -117,5 +124,27 @@ task FACETS {
         String ploidy = read_string("ploidy.txt")
         String log_likelihood = read_string("log_likelihood.txt")
         String dip_log_r = read_string("dip_log_r.txt")
+    }
+}
+
+task InferWGD {
+    File cncf
+
+    Int memoryGB=3
+    Int diskGB=50
+
+    command <<<
+        python /infer_wgd.py --cncf ${cncf}
+    >>>
+
+    runtime {
+        docker: "vanallenlab/facets:infer_wgd"
+        memory: "${memoryGB} GB"
+        disks: "local-disk ${diskGB} SSD"
+    }
+
+    output {
+        String fraction_mcn_ge2 = read_string("facets_fraction_mcn_ge2.txt")
+        String wgd_bool = read_string("facets_wgd_boolean.txt")
     }
 }
