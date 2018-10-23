@@ -5,11 +5,12 @@ args = commandArgs(trailingOnly=TRUE)
 pair_name = args[1]
 pileup = args[2]
 cval = as.numeric(args[3])
+maxiter = as.numeric(args[4])
 
 rcmat = readSnpMatrix(pileup)
 xx = preProcSample(rcmat)
 oo = procSample(xx, cval = cval)
-fit = emcncf(oo, maxiter = 1000)
+fit = emcncf(oo, maxiter = maxiter)
 
 purity = as.numeric(signif(fit$purity, 3))
 ploidy = as.numeric(signif(fit$ploidy, 3))

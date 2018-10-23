@@ -12,6 +12,7 @@ workflow facets_workflow {
     Int? pileup_min_read_counts = 0
 
     Int? cval = 150
+    Int? maxiter = 10
 
     call Pileup {
         input:
@@ -31,7 +32,8 @@ workflow facets_workflow {
         input:
             pair_name=pair_name,
             pileup=Pileup.pileup,
-            cval=cval
+            cval=cval,
+            maxiter=maxiter
     }
 
     call InferWGD {
@@ -99,12 +101,13 @@ task FACETS {
     String pair_name
     File pileup
     Int cval
+    Int maxiter
 
     Int memoryGB = 3
     Int diskGB = 200
 
     command <<<
-        Rscript /facets.R ${pair_name} ${pileup} ${cval}
+        Rscript /facets.R ${pair_name} ${pileup} ${cval} ${maxiter}
     >>>
 
     runtime {
