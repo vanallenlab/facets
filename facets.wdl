@@ -5,11 +5,20 @@ workflow facets_workflow {
     File normal_bam
     File normal_bam_index
 
-    File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/facets/exac_hets.vcf"
-    File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/facets/exac_hets.vcf.idx"
+    File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz"
+    File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz.tbi"
     Int? pileup_min_map_quality = 15
     Int? pileup_min_base_quality = 20
     Int? pileup_min_read_counts = 0
+
+    Int? cval = 150
+    Int? maxiter = 10
+
+    Int? min_map_quality = 15
+    Int? min_base_quality = 20
+    Int? min_read_counts_normal = 25
+    Int? min_read_counts_tumor = 0
+    Int? pseudo_snps = 100
 
     Int? cval = 150
     Int? maxiter = 10
@@ -23,9 +32,11 @@ workflow facets_workflow {
             normal_bam_index=normal_bam_index,
             snp_vcf=pileup_snp_vcf,
             snp_vcf_index=pileup_snp_vcf_index,
-            min_map_quality=pileup_min_map_quality,
-            min_base_quality=pileup_min_base_quality,
-            min_read_counts=pileup_min_read_counts
+            min_map_quality=min_map_quality,
+            min_base_quality=min_base_quality,
+            min_read_counts_normal=min_read_counts_normal,
+            min_read_counts_tumor=min_read_counts_tumor,
+            pseudo_snps=pseudo_snps
     }
 
     call FACETS {
@@ -70,16 +81,20 @@ task Pileup {
 
     Int? min_map_quality
     Int? min_base_quality
-    Int? min_read_counts
+    Int? min_read_counts_normal
+    Int? min_read_counts_tumor
+    Int? pseudo_snps
 
     Int memoryGB = 3
     Int diskGB = 200
 
     command <<<
         /./snp-pileup --verbose \
+            --gzip \
             --min-map-quality ${min_map_quality} \
             --min-base-quality ${min_base_quality} \
-            --min-read-counts ${min_read_counts} \
+            --min-read-counts ${min_read_counts_normal},${min_read_counts_tumor} \
+            --pseudo-snps ${pseudo_snps}
             ${snp_vcf} \
             ${pair_name}.pileup \
             ${normal_bam} \
