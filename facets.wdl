@@ -7,12 +7,6 @@ workflow facets_workflow {
 
     File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz"
     File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz.tbi"
-    Int? pileup_min_map_quality = 15
-    Int? pileup_min_base_quality = 20
-    Int? pileup_min_read_counts = 0
-
-    Int? cval = 150
-    Int? maxiter = 10
 
     Int? min_map_quality = 15
     Int? min_base_quality = 20
