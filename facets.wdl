@@ -5,8 +5,8 @@ workflow facets_workflow {
     File normal_bam
     File normal_bam_index
 
-    File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz"
-    File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_150.vcf.gz.tbi"
+    File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_134_b37.leftAligned.vcf"
+    File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/broadinstitute/reference/hg19/db/dbsnp/dbsnp_134_b37.leftAligned.vcf.idx"
 
     Int? min_map_quality = 15
     Int? min_base_quality = 20
@@ -16,6 +16,15 @@ workflow facets_workflow {
 
     Int? cval = 150
     Int? maxiter = 10
+
+    Int? pileup_memoryGB = 3
+    Int? pileup_diskGB = 200
+
+	Int? facets_memoryGB = 3
+	Int? facets_diskGB = 200
+
+    Int? inferwgd_memoryGB = 3
+	Int? inferwgd_diskGB = 50
 
     call Pileup {
         input:
@@ -30,7 +39,9 @@ workflow facets_workflow {
             min_base_quality=min_base_quality,
             min_read_counts_normal=min_read_counts_normal,
             min_read_counts_tumor=min_read_counts_tumor,
-            pseudo_snps=pseudo_snps
+            pseudo_snps=pseudo_snps,
+            memoryGB=pileup_memoryGB,
+            diskGB=pileup_diskGB
     }
 
     call FACETS {
@@ -38,12 +49,16 @@ workflow facets_workflow {
             pair_name=pair_name,
             pileup=Pileup.pileup,
             cval=cval,
-            maxiter=maxiter
+            maxiter=maxiter,
+            memoryGB=facets_memoryGB,
+            diskGB=facets_diskGB
     }
 
     call InferWGD {
         input:
-            cncf=FACETS.cncf
+            cncf=FACETS.cncf,
+            memoryGB=inferwgd_memoryGB,
+            diskGB=inferwgd_diskGB
     }
 
     output {
@@ -79,8 +94,8 @@ task Pileup {
     Int? min_read_counts_tumor
     Int? pseudo_snps
 
-    Int memoryGB = 3
-    Int diskGB = 200
+    Int? memoryGB
+    Int? diskGB
 
     command <<<
         /./snp-pileup --verbose \
@@ -88,7 +103,7 @@ task Pileup {
             --min-map-quality ${min_map_quality} \
             --min-base-quality ${min_base_quality} \
             --min-read-counts ${min_read_counts_normal},${min_read_counts_tumor} \
-            --pseudo-snps ${pseudo_snps}
+            --pseudo-snps ${pseudo_snps} \
             ${snp_vcf} \
             ${pair_name}.pileup \
             ${normal_bam} \
@@ -102,7 +117,7 @@ task Pileup {
     }
 
     output {
-        File pileup="${pair_name}.pileup"
+        File pileup="${pair_name}.pileup.gz"
     }
 }
 
@@ -112,8 +127,8 @@ task FACETS {
     Int cval
     Int maxiter
 
-    Int memoryGB = 3
-    Int diskGB = 200
+    Int? memoryGB
+    Int? diskGB
 
     command <<<
         Rscript /facets.R ${pair_name} ${pileup} ${cval} ${maxiter}
@@ -142,8 +157,8 @@ task FACETS {
 task InferWGD {
     File cncf
 
-    Int memoryGB=3
-    Int diskGB=50
+    Int? memoryGB
+    Int? diskGB
 
     command <<<
         python /infer_wgd.py --cncf ${cncf}
