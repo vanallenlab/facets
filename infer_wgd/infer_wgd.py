@@ -5,24 +5,38 @@ import argparse
 TOTAL_COPY_NUMBER = 'tcn.em'
 MINOR_COPY_NUMBER = 'lcn.em'
 MAJOR_COPY_NUMBER = 'mcn.em'
+START_POS = 'start'
+END_POS = 'end'
+BASES = 'bases'
+SEGMENT_PERCENT = 'segment_percent'
 
 MCN_THRESHOLD = 2.0
-PERCENT_THRESHOLD = 0.50
+FRACTION_THRESHOLD = 0.50
+
+
+def calculate_bases_covered(start, end):
+    return end.subtract(start)
 
 
 def calculate_fraction_mcn_greater_than_threshold(df):
-    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(0.0)
+    # Filling NAs with 1 to be conservative. TO DO: annotate with https://github.com/mskcc/facets/issues/62
+    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(1.0)
     df[MAJOR_COPY_NUMBER] = df[TOTAL_COPY_NUMBER].subtract(df[MINOR_COPY_NUMBER])
-    number_segments_mcn_greater_than_threshold = df[df[MAJOR_COPY_NUMBER].ge(MCN_THRESHOLD)].shape[0]
-    return number_segments_mcn_greater_than_threshold / df.shape[0]
+    idx_mcn_ge_2 = df[df[MAJOR_COPY_NUMBER].astype(float).ge(MCN_THRESHOLD)].index
+
+    df[BASES] = calculate_bases_covered(df.loc[:, START_POS], df.loc[:, END_POS])
+    total_bases = df[BASES].sum()
+    segment_percent = df[BASES].divide(total_bases)
+
+    return segment_percent.loc[idx_mcn_ge_2].sum()
 
 
 def read_cncf(handle):
     return pd.read_csv(handle, sep='\t', comment='#')
 
 
-def return_wgd_bool(percent):
-    if percent > PERCENT_THRESHOLD:
+def return_wgd_bool(fraction):
+    if fraction > FRACTION_THRESHOLD:
         return True
     else:
         return False
