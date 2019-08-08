@@ -34,7 +34,7 @@ Inputs:
 - Minimum read depth in normal and tumor
 - Number of pseudo SNPs
 
-Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst/extcode) for more details of each input. 
+Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst/extcode) for more details of each input. The default VCF of common variants is [human 9606 b151 GRCh37](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/), if you do not have access please download the appropriate VCF and host in a bucket that you have access to.
 
 Outputs:
 - Pileup in gunzip format. Read more in the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf).
