@@ -1,5 +1,6 @@
 # FACETS
-**Please read the manuscript and the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) before using**. 
+**Please read the manuscript and the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) before using**.  
+
 Github: [mskcc/facets](https://github.com/mskcc/facets)  
 DOI: [https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)  
 Citation: [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
