@@ -27,7 +27,7 @@ run_facets = function(seed, pileup, min_normal_depth, cval, genome_build, maxite
 }
 
 plot_facets_iterations = function(pair_name, seeds_dataframe, median_purity, median_ploidy) {
-    title = paste('Stability of FACETS outputs across 10 seeds,\n', pair_name, sep='')
+    title = paste('Stability of FACETS outputs across ', seed_iterations, ' seeds,\n', pair_name, sep='')
     p = ggplot(seeds_dataframe, aes(x=ploidy, y=purity)) + xlim(0, 8) + ylim(0, 1) +
         geom_hline(yintercept=median_purity, linetype='dashed', size=1, alpha=0.2) +
         geom_vline(xintercept=median_ploidy, linetype='dashed', size=1, alpha=0.2) +
