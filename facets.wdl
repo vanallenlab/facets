@@ -22,13 +22,13 @@ workflow facets_workflow {
     Int? pileup_memoryGB = 3
     Int? pileup_diskGB = 200
 
-	Int? facets_memoryGB = 3
-	Int? facets_diskGB = 200
+    Int? facets_memoryGB = 3
+    Int? facets_diskGB = 200
 
     Int? inferwgd_memoryGB = 3
-	Int? inferwgd_diskGB = 50
+    Int? inferwgd_diskGB = 50
 
-	Int? preemptible_attempts = 3
+    Int? preemptible_attempts = 3
 
     call Pileup {
         input:

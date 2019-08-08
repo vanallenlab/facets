@@ -1,5 +1,5 @@
 # FACETS
-**Please read the manuscript and the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) before using**.  
+**Please read [the manuscript](https://academic.oup.com/nar/article/44/16/e131/2460163) and the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) before using**.  
 
 Github: [mskcc/facets](https://github.com/mskcc/facets)  
 DOI: [https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)  
@@ -17,7 +17,7 @@ To best use this method, please:
 - Read the help text on each function called in facets.R
 
 Docker image: [vanallenlab/facets](https://hub.docker.com/r/vanallenlab/facets/)  
-FireCloud method: [breardon/facets](https://portal.firecloud.org/#methods/breardon/facets/)
+FireCloud method: [vanallenlab/facets](https://portal.firecloud.org/#methods/vanallenlab/facets/)
 
 ## Task details
 
@@ -33,12 +33,13 @@ Inputs:
 - Minimum based quality
 - Minimum read depth in normal and tumor
 - Number of pseudo SNPs
+
 Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst/extcode) for more details of each input. 
 
 Outputs:
 - Pileup in gunzip format. Read more in the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf).
 
-[Relevant codeblock in WDL]()
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L95-L138)
 
 ### FACETS
 Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. 
@@ -62,7 +63,7 @@ Outputs:
 - Seed value closest to median purity
 - Number of seeds that resulted in purity values equaling NA
 
-[Relevant codeblock in WDL]()
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L140-L180)
 
 ### Infer Whole-genome doubling
 Infers whole genome doubling based on [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1). Calculates major copy number (MCN) estimate based on total copy number (TCN) estimate and minor copy number (LCN) estimate from FACETS and calls whole-genome doubling if the average MCN across the genome is greater than 2. In cases that LCN is equal to NA, a value of 1 is used to be conservative in the calculation of MCN.
@@ -74,7 +75,7 @@ Outputs:
 - Fraction major copy number greater than 2
 - Whole genome doubling boolean, if the fraction is greater than 0.5
 
-[Relevant codeblock in WDL]()
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L182-L204)
 
 ### Additional reading:
 - [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
