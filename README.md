@@ -15,6 +15,7 @@ To best use this method, please:
 - Observing NA purity values? [See this Github issue](https://github.com/mskcc/facets/issues/68) and also [this one](https://github.com/mskcc/facets/issues/66)
 - Read and search the [issues, both open and closed, on Github](https://github.com/mskcc/facets/issues?utf8=%E2%9C%93&q=) to learn more about the method
 - Read the help text on each function called in facets.R
+- Inspect each sample closely
 
 Docker image: [vanallenlab/facets](https://hub.docker.com/r/vanallenlab/facets/)  
 FireCloud method: [vanallenlab/facets](https://portal.firecloud.org/#methods/vanallenlab/facets/)
@@ -39,7 +40,7 @@ Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst
 Outputs:
 - Pileup in gunzip format. Read more in the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf).
 
-[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L95-L138)
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L82-L125)
 
 ### FACETS
 Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. If you would prefer a different seed to use, set `seed_iterations` to 1 and specify your preferred seed.
@@ -63,19 +64,19 @@ Outputs:
 - Seed value closest to median purity
 - Number of seeds that resulted in purity values equaling NA
 
-[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L140-L180)
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L127-L167)
 
 ### Infer Whole-genome doubling
-Infers whole genome doubling based on [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1). Calculates major copy number (MCN) estimate based on total copy number (TCN) estimate and minor copy number (LCN) estimate from FACETS and calls whole-genome doubling if the average MCN across the genome is greater than 2. In cases that LCN is equal to NA, a value of 1 is used to be conservative in the calculation of MCN.
+Infers whole genome doubling based on [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1). Calculates major copy number (MCN) estimate based on total copy number (TCN) estimate and minor copy number (LCN) estimate from FACETS and calls whole-genome doubling if the average MCN across the autosomal genome is greater than 2. In cases that LCN is equal to NA, a value of 1 is used to be conservative in the calculation of MCN.
 
 Inputs:
 - Copy number cellular fractions
 
 Outputs:
 - Fraction major copy number greater than 2
-- Whole genome doubling boolean, if the fraction is greater than 0.5
+- Putative whole genome doubling, if the fraction of MCN across the autosomal genome is greater than 0.5
 
-[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L182-L204)
+[Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L169-L191)
 
 ### Additional reading:
 - [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
