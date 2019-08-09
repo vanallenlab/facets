@@ -5,8 +5,10 @@ workflow facets_workflow {
     File normal_bam
     File normal_bam_index
 
-    File? pileup_snp_vcf = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/common_sites/00-common_all.vcf.gz"
-    File? pileup_snp_vcf_index = "gs://fc-f36b3dc8-85f7-4d7f-bc99-a4610229d66a/common_sites/00-common_all.vcf.gz"
+    # VCF of common SNPs. Please use the a suitable VCF that is consistent with the genome build
+    # Read more in the pileup documentation: https://github.com/mskcc/facets/tree/master/inst/extcode
+    File? pileup_snp_vcf
+    File? pileup_snp_vcf_index
 
     Int? min_map_quality = 15
     Int? min_base_quality = 20
@@ -18,15 +20,6 @@ workflow facets_workflow {
     Int? maxiter = 10
     Int? seed_initial = 42
     Int? seed_iterations = 10
-
-    Int? pileup_memoryGB = 3
-    Int? pileup_diskGB = 200
-
-    Int? facets_memoryGB = 3
-    Int? facets_diskGB = 200
-
-    Int? inferwgd_memoryGB = 3
-    Int? inferwgd_diskGB = 50
 
     Int? preemptible_attempts = 3
 
@@ -44,8 +37,6 @@ workflow facets_workflow {
             min_read_counts_normal=min_read_counts_normal,
             min_read_counts_tumor=min_read_counts_tumor,
             pseudo_snps=pseudo_snps,
-            memoryGB=pileup_memoryGB,
-            diskGB=pileup_diskGB,
             preemptible_attempts=preemptible_attempts
     }
 
@@ -58,16 +49,12 @@ workflow facets_workflow {
             maxiter=maxiter,
             seed_initial=seed_initial,
             seed_iterations=seed_iterations,
-            memoryGB=facets_memoryGB,
-            diskGB=facets_diskGB,
             preemptible_attempts=preemptible_attempts
     }
 
     call InferWGD {
         input:
             cncf=FACETS.cncf,
-            memoryGB=inferwgd_memoryGB,
-            diskGB=inferwgd_diskGB,
             preemptible_attempts=preemptible_attempts
     }
 
@@ -108,9 +95,9 @@ task Pileup {
     Int? min_read_counts_tumor
     Int? pseudo_snps
 
-    Int? memoryGB
-    Int? diskGB
     Int? preemptible_attempts
+    Int? memoryGB = 4
+    Int? diskGB = ceil(1.1 * (size(normal_bam, "G") + size(tumor_bam, "G"))) + 20
 
     command <<<
         /./snp-pileup --verbose \
@@ -146,9 +133,9 @@ task FACETS {
     Int seed_initial
     Int seed_iterations
 
-    Int? memoryGB
-    Int? diskGB
     Int? preemptible_attempts
+    Int? memoryGB = 4
+    Int? diskGB = ceil(1.1 * (size(pileup, "G"))) + 20
 
     command <<<
         Rscript /facets.R ${pair_name} ${pileup} ${ndepth} ${cval} ${maxiter} ${seed_initial} ${seed_iterations}
@@ -182,9 +169,9 @@ task FACETS {
 task InferWGD {
     File cncf
 
-    Int? memoryGB
-    Int? diskGB
     Int? preemptible_attempts
+    Int? memoryGB = 4
+    Int? diskGB = ceil(1.1 * (size(cncf, "G"))) + 20
 
     command <<<
         python /infer_wgd.py --cncf ${cncf}

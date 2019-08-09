@@ -42,7 +42,7 @@ Outputs:
 [Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L95-L138)
 
 ### FACETS
-Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. 
+Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. If you would prefer a different seed to use, set `seed_iterations` to 1 and specify your preferred seed.
 
 Inputs:
 - Pair name
