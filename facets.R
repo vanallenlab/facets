@@ -91,6 +91,9 @@ dip_log_r = oo$dipLogR
 flags = oo$flags
 emflags = fit$emflags
 
+number_segments = NROW(cncf)
+number_segments_NA_LCN = sum(is.na(cncf$lcn.em))
+
 genome_segments_filename = paste(pair_name, '.genome_segments.pdf', sep='')
 diagnostic_plot_filename = paste(pair_name, '.diagnostic_plot.pdf', sep='')
 cncf_dataframe_filename = paste(pair_name, '.facets_cncf.txt', sep='')
@@ -126,3 +129,5 @@ write(log_likelihood, 'log_likelihood.txt')
 write(dip_log_r, 'dip_log_r.txt')
 write(used_seed, 'seed_used.txt')
 write(n_iteratons_na_purity, 'number_iterations_with_na_purity.txt')
+write(number_segments, 'number_segments.txt')
+write(number_segments_NA_LCN, 'number_segments_NA_LCN.txt')

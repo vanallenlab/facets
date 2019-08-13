@@ -74,6 +74,8 @@ workflow facets_workflow {
         String facets_dip_log_r = FACETS.dip_log_r
         String facets_seed_used = FACETS.seed_used
         String facets_n_iterations_na_purity = FACETS.n_iterations_na_purity
+        String facets_n_segments = FACETS.n_segments
+        String facets_n_segments_na_lcn = FACETS.n_segments_na_lcn
         String facets_fraction_mcn_ge2 = InferWGD.fraction_mcn_ge2
         String facets_wgd_bool = InferWGD.wgd_bool
     }
@@ -163,6 +165,8 @@ task FACETS {
         String dip_log_r = read_string("dip_log_r.txt")
         String seed_used = read_string("seed_used.txt")
         String n_iterations_na_purity = read_string("number_iterations_with_na_purity.txt")
+        String n_segments = read_string("number_segments.txt")
+        String n_segments_na_lcn = read_string("number_segments_NA_LCN.txt")
     }
 }
 
