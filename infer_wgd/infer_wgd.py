@@ -25,7 +25,7 @@ def calculate_bases_covered(start, end):
 
 def calculate_fraction_mcn_greater_than_threshold(df):
     # Filling NAs with 1 to be conservative. TO DO: annotate with https://github.com/mskcc/facets/issues/62
-    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(1.0)
+    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(0.0)
     df[MAJOR_COPY_NUMBER] = df[TOTAL_COPY_NUMBER].subtract(df[MINOR_COPY_NUMBER])
     idx_mcn_ge_2 = df[df[MAJOR_COPY_NUMBER].astype(float).ge(MCN_THRESHOLD)].index
 

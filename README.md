@@ -67,7 +67,7 @@ Outputs:
 [Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L127-L167)
 
 ### Infer Whole-genome doubling
-Infers whole genome doubling based on [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1). Calculates major copy number (MCN) estimate based on total copy number (TCN) estimate and minor copy number (LCN) estimate from FACETS and calls whole-genome doubling if the average MCN across the autosomal genome is greater than 2. In cases that LCN is equal to NA, a value of 1 is used to be conservative in the calculation of MCN.
+Infers whole genome doubling based on [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1). Calculates major copy number (MCN) estimate based on total copy number (TCN) estimate and minor copy number (LCN) estimate from FACETS and calls whole-genome doubling if the average MCN across the autosomal genome is greater than 2. In cases that LCN is equal to NA, a value of 0 is used.
 
 Inputs:
 - Copy number cellular fractions
