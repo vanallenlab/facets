@@ -5,9 +5,9 @@ Github: [mskcc/facets](https://github.com/mskcc/facets)
 DOI: [https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)  
 Citation: [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
 
-This repository contains an implementation of [FACETS](https://github.com/mskcc/facets) for FireCloud, an algorithm to implement fraction and copy number estimate from tumor/normal sequencing, for FireCloud. FACETS is run on tumor-normal pairs to determine the purity and ploidy of a tumor sample, as well as infer allele-specific copy number. 
+This repository contains an implementation of [FACETS](https://github.com/mskcc/facets), an algorithm to estimate fraction and allele specific copy number from tumor/normal sequencing by Ronglai Shen and Venkatraman E. Seshan from Memorial Sloan-Kettering Cancer Center's Department of Epidemiology and Biostatistics, for FireCloud. FACETS is run on tumor-normal pairs to determine the purity and ploidy of a tumor sample, as well as infer allele-specific copy number.
 
-To best use this method, please:
+To best use this repository, please:
 - Read [the manuscript](https://academic.oup.com/nar/article/44/16/e131/2460163) and the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf)
 - Consider the coverage of your samples, especially when thinking of the ndepth (minimum read depth in normal) parameter. 
 - Check the emflags to see if your sample is noisy
@@ -35,7 +35,7 @@ Inputs:
 - Minimum read depth in normal and tumor
 - Number of pseudo SNPs
 
-Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst/extcode) for more details of each input. The default VCF of common variants is [human 9606 b151 GRCh37](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/), if you do not have access please download the appropriate VCF and host in a bucket that you have access to.
+Read the [pileup documentation](https://github.com/mskcc/facets/tree/master/inst/extcode) for more details of each input. The default VCF of common variants in the FireCloud method configuration is [human 9606 b151 GRCh37](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/), if you do not have access please download the appropriate VCF and host in a bucket that you have access to.
 
 Outputs:
 - Pileup in gunzip format. Read more in the [userguide](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf).
@@ -43,7 +43,7 @@ Outputs:
 [Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L82-L125)
 
 ### FACETS
-Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. If you would prefer a different seed to use, set `seed_iterations` to 1 and specify your preferred seed.
+Estimates fraction and allele specific copy number from paired tumor/normal sequencing. As a result, also estimates purity and ploidy of a given tumor sample. This implementation will run FACETS 10 times across different seeds to observe how stable the inferred purity and ploidy values are for a given pair, the seed with a purity closest to the median purity value is selected. If you would prefer to not iterate and use a specific seed, set `seed_iterations` to `1` and specify your preferred seed with `seed_initial`.
 
 Inputs:
 - Pair name

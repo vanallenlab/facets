@@ -171,7 +171,7 @@ task InferWGD {
 
     Int? preemptible_attempts
     Int? memoryGB = 4
-    Int? diskGB = ceil(1.1 * (size(cncf, "G"))) + 20
+    Int? diskGB = ceil(1.1 * (size(cncf, "G"))) + 5
 
     command <<<
         python /infer_wgd.py --cncf ${cncf}
