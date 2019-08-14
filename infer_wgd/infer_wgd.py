@@ -5,6 +5,7 @@ import argparse
 TOTAL_COPY_NUMBER = 'tcn.em'
 MINOR_COPY_NUMBER = 'lcn.em'
 MAJOR_COPY_NUMBER = 'mcn.em'
+CHROM = 'chrom'
 START_POS = 'start'
 END_POS = 'end'
 BASES = 'bases'
@@ -14,13 +15,17 @@ MCN_THRESHOLD = 2.0
 FRACTION_THRESHOLD = 0.50
 
 
+def subset_autosomal(df):
+    return df[df[CHROM].le(22)]
+
+
 def calculate_bases_covered(start, end):
     return end.subtract(start)
 
 
 def calculate_fraction_mcn_greater_than_threshold(df):
     # Filling NAs with 1 to be conservative. TO DO: annotate with https://github.com/mskcc/facets/issues/62
-    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(1.0)
+    df[MINOR_COPY_NUMBER] = df[MINOR_COPY_NUMBER].fillna(0.0)
     df[MAJOR_COPY_NUMBER] = df[TOTAL_COPY_NUMBER].subtract(df[MINOR_COPY_NUMBER])
     idx_mcn_ge_2 = df[df[MAJOR_COPY_NUMBER].astype(float).ge(MCN_THRESHOLD)].index
 
@@ -59,7 +64,8 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     cncf = read_cncf(args.cncf)
-    fraction = calculate_fraction_mcn_greater_than_threshold(cncf)
+    autosomal = subset_autosomal(cncf)
+    fraction = calculate_fraction_mcn_greater_than_threshold(autosomal)
     wgd = return_wgd_bool(fraction)
 
     write_output(str(round(fraction, 4)), 'facets_fraction_mcn_ge2.txt')
