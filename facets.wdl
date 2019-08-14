@@ -7,8 +7,8 @@ workflow facets_workflow {
 
     # VCF of common SNPs. Please use the a suitable VCF that is consistent with the genome build
     # Read more in the pileup documentation: https://github.com/mskcc/facets/tree/master/inst/extcode
-    File? pileup_snp_vcf
-    File? pileup_snp_vcf_index
+    File pileup_snp_vcf
+    File pileup_snp_vcf_index
 
     Int? min_map_quality = 15
     Int? min_base_quality = 20
