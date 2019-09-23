@@ -145,7 +145,7 @@ task FACETS {
     >>>
 
     runtime {
-        docker: "vanallenlab/facets:v0.5.14.1"
+        docker: "vanallenlab/facets:v0.5.14-2"
         memory: "${memoryGB} GB"
         disks: "local-disk ${diskGB} SSD"
         preemptible: preemptible_attempts
