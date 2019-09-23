@@ -131,3 +131,7 @@ write(used_seed, 'seed_used.txt')
 write(n_iteratons_na_purity, 'number_iterations_with_na_purity.txt')
 write(number_segments, 'number_segments.txt')
 write(number_segments_NA_LCN, 'number_segments_NA_LCN.txt')
+
+# save RData object needed for add_ccf_to_maf_config method, part of Phylogic preprocessing
+out = oo
+save(fit, out, file=paste(pair_name, '.RData', sep=''))
