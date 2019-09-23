@@ -133,5 +133,22 @@ write(number_segments, 'number_segments.txt')
 write(number_segments_NA_LCN, 'number_segments_NA_LCN.txt')
 
 # save RData object needed for add_ccf_to_maf_config method, part of Phylogic preprocessing
+formatSegmentOutput = function(out, sampID) {
+    seg = list()
+    seg$ID = rep(sampID, nrow(out$out))
+    seg$chrom = out$out$chrom
+    seg$loc.start = rep(NA, length(seg$ID))
+    seg$loc.end = seg$loc.start
+    seg$num.mark = out$out$num.mark
+    seg$seg.mean = out$out$cnlr.median
+    for(i in 1:nrow(out$out)) {
+        lims = range(out$jointseg$maploc[(out$jointseg$chrom == out$out$chrom[i] & out$jointseg$seg == out$out$seg[i])], na.rm=T)
+        seg$loc.start[i] = lims[1]
+        seg$loc.end[i] = lims[2]
+    }
+    as.data.frame(seg)
+}
+
 out = oo
+out$IGV <- formatSegmentOutput(out, pair_name)
 save(fit, out, file=paste(pair_name, '.RData', sep=''))
