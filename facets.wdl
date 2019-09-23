@@ -68,6 +68,7 @@ workflow facets_workflow {
         File facets_flags = FACETS.flags
         File facets_emflags = FACETS.emflags
         File facets_iterations = FACETS.iterations
+        File facets_rdata = FACETS.rdata
         String facets_purity = FACETS.purity
         String facets_ploidy = FACETS.ploidy
         String facets_log_likelihood = FACETS.log_likelihood
@@ -159,6 +160,7 @@ task FACETS {
         File flags = "${pair_name}.facets_flags.txt"
         File emflags = "${pair_name}.facets_emflags.txt"
         File iterations = "${pair_name}.facets_iterations.txt"
+        File rdata = "${pair_name}.RData"
         String purity = read_string("purity.txt")
         String ploidy = read_string("ploidy.txt")
         String log_likelihood = read_string("log_likelihood.txt")
