@@ -58,6 +58,12 @@ workflow facets_workflow {
             preemptible_attempts=preemptible_attempts
     }
 
+    call InferPGA {
+        input:
+            cncf=FACETS.cncf,
+            preemptible_attempts=preemptible_attempts
+    }
+
     output {
         File facets_pileup = Pileup.pileup
         File facets_genome_segments = FACETS.genome_segments
@@ -79,6 +85,7 @@ workflow facets_workflow {
         String facets_n_segments_na_lcn = FACETS.n_segments_na_lcn
         String facets_fraction_mcn_ge2 = InferWGD.fraction_mcn_ge2
         String facets_wgd_bool = InferWGD.wgd_bool
+        String facets_percent_genome_altered = InferPGA.pga
     }
 }
 
@@ -193,5 +200,28 @@ task InferWGD {
     output {
         String fraction_mcn_ge2 = read_string("facets_fraction_mcn_ge2.txt")
         String wgd_bool = read_string("facets_wgd_boolean.txt")
+    }
+}
+
+task InferPGA {
+    File cncf
+
+    Int? preemptible_attempts
+    Int? memoryGB = 4
+    Int? diskGB = ceil(1.1 * (size(cncf, "G"))) + 5
+
+    command <<<
+        python /infer_pga.py --cncf ${cncf}
+    >>>
+
+    runtime {
+        docker: "vanallenlab/facets:infer_pga"
+        memory: "${memoryGB} GB"
+        disks: "local-disk ${diskGB} SSD"
+        preemptible: preemptible_attempts
+    }
+
+    output {
+        String pga = read_string("facets_fraction_genome_CNA_altered.txt")
     }
 }

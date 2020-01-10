@@ -78,6 +78,15 @@ Outputs:
 
 [Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L169-L191)
 
+### Infer precent genome altered (PGA)
+Infers the percentage of the genome altered by copy number alterations (differences from normal ploidy). Commonly used in a variety of papers, ([example here](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6145837/)). This is done by taking all the segments that do not match diploid copy number (2 for autosomes and 1 for sex chromosomes) and computing their sizes, then dividing by the total size of all the segments. In cases that total copy number is equal to NA, a value of 0 is used, although this should be impossible.
+
+Inputs:
+- Copy number cellular fractions
+
+Outputs:
+- Fraction of genome altered
+
 ### Additional reading:
 - [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
 - [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1)
