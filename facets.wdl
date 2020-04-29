@@ -16,7 +16,8 @@ workflow facets_workflow {
     Int? min_read_counts_tumor = 0
     Int? pseudo_snps = 100
 
-    Int? cval = 150
+    Int? preproc_cval = 150
+    Int? proc_cval = 150
     Int? maxiter = 10
     Int? seed_initial = 42
     Int? seed_iterations = 10
@@ -45,7 +46,8 @@ workflow facets_workflow {
             pair_name=pair_name,
             pileup=Pileup.pileup,
             ndepth=min_read_counts_normal,
-            cval=cval,
+            preproc_cval=preproc_cval,
+            proc_cval=proc_cval,
             maxiter=maxiter,
             seed_initial=seed_initial,
             seed_iterations=seed_iterations,
@@ -138,7 +140,8 @@ task FACETS {
     String pair_name
     File pileup
     Int ndepth
-    Int cval
+    Int preproc_cval
+    Int proc_cval
     Int maxiter
     Int seed_initial
     Int seed_iterations
@@ -148,7 +151,7 @@ task FACETS {
     Int? diskGB = ceil(1.1 * (size(pileup, "G"))) + 20
 
     command <<<
-        Rscript /facets.R ${pair_name} ${pileup} ${ndepth} ${cval} ${maxiter} ${seed_initial} ${seed_iterations}
+        Rscript /facets.R ${pair_name} ${pileup} ${ndepth} ${preproc_cval} ${proc_cval} ${maxiter} ${seed_initial} ${seed_iterations}
     >>>
 
     runtime {

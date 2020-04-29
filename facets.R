@@ -5,22 +5,23 @@ args = commandArgs(trailingOnly=TRUE)
 pair_name = args[1]
 pileup = args[2]
 min_normal_depth = as.numeric(args[3])
-cval = as.numeric(args[4])
-maxiter = as.numeric(args[5])
-seed_initial = as.numeric(args[6])
-seed_iterations = as.numeric(args[7])
+preproc_cval = as.numeric(args[4])
+proc_cval = as.numeric(args[5])
+maxiter = as.numeric(args[6])
+seed_initial = as.numeric(args[7])
+seed_iterations = as.numeric(args[8])
 genome_build = "hg19"
 
 if (seed_iterations <= 0) {
     seed_iterations = 1
 }
 
-run_facets = function(seed, pileup, min_normal_depth, cval, genome_build, maxiter) {
+run_facets = function(seed, pileup, min_normal_depth, preproc_cval, proc_cval, genome_build, maxiter) {
     set.seed(seed)
 
     rcmat = readSnpMatrix(pileup)
-    xx = preProcSample(rcmat, ndepth = min_normal_depth, cval = cval, gbuild = genome_build)
-    oo = procSample(xx, cval = cval)
+    xx = preProcSample(rcmat, ndepth = min_normal_depth, cval = preproc_cval, gbuild = genome_build)
+    oo = procSample(xx, cval = proc_cval)
     fit = emcncf(oo, maxiter = maxiter)
 
     return(list(seed_oo=oo, seed_fit=fit))
@@ -43,7 +44,7 @@ plot_facets_iterations = function(pair_name, seeds_dataframe, median_purity, med
 seeds = seed_initial:(seed_initial+seed_iterations-1)
 seeds_dataframe = data.frame()
 for (seed in seeds) {
-    seed_list = run_facets(seed, pileup, min_normal_depth, cval, genome_build, maxiter)
+    seed_list = run_facets(seed, pileup, min_normal_depth, preproc_cval, proc_cval, genome_build, maxiter)
     seed_oo = seed_list$seed_oo
     seed_fit = seed_list$seed_fit
 
@@ -79,7 +80,7 @@ if (!is.na(median_purity)) {
   used_seed = seed_initial
 }
 
-facets_list = run_facets(used_seed, pileup, min_normal_depth, cval, genome_build, maxiter)
+facets_list = run_facets(used_seed, pileup, min_normal_depth, preproc_cval, proc_cval, genome_build, maxiter)
 oo = facets_list$seed_oo
 fit = facets_list$seed_fit
 
