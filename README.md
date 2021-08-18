@@ -87,7 +87,7 @@ Inputs:
 Outputs:
 - Fraction of genome altered
 
-### Additional reading:
+## Additional reading:
 - [Ronglai Shen, Venkatraman E. Seshan; FACETS: allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing, Nucleic Acids Research, Volume 44, Issue 16, 19 September 2016, Pages e131, https://doi.org/10.1093/nar/gkw520](https://academic.oup.com/nar/article/44/16/e131/2460163)
 - [Bielski CM, Zehir A, Penson AV, et al. Genome doubling shapes the evolution and prognosis of advanced cancers](https://doi.org/10.1038/s41588-018-0165-1)
 - [FACETS Github issue, "filtering and interpreting results"](https://github.com/mskcc/facets/issues/62)
