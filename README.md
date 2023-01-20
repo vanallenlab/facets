@@ -78,7 +78,7 @@ Outputs:
 
 [Relevant codeblock in WDL](https://github.com/vanallenlab/facets/blob/lab_harmonize/facets.wdl#L169-L191)
 
-### Infer precent genome altered (PGA)
+### Infer percent genome altered (PGA)
 Infers the percentage of the genome altered by copy number alterations (differences from normal ploidy). Commonly used in a variety of papers, ([example here](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6145837/)). This is done by taking all the segments that do not match diploid copy number (2 for autosomes and 1 for sex chromosomes) and computing their sizes, then dividing by the total size of all the segments. In cases that total copy number is equal to NA, a value of 0 is used, although this should be impossible.
 
 Inputs:
